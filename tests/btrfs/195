@@ -53,6 +53,14 @@ run_testcase() {
 	src_type=${args[1]}
 	dst_type=${args[2]}
 
+	if [ `_zone_type ${SCRATCH_DEV}` != "none" -a \
+		\( ${src_type} = "raid5" -o \
+		   ${src_type} = "raid6" -o \
+		   ${dst_type} = "raid5" -o \
+		   ${dst_type} = "raid6" \) ]; then
+		return
+	fi
+
 	_scratch_dev_pool_get $num_disks
 
 	echo "=== Running test: $1 ===" >> $seqres.full

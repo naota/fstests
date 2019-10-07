@@ -34,6 +34,8 @@ _cleanup()
 _supported_fs btrfs
 _require_scratch
 _require_dm_target flakey
+# inode cache is not supported on HMZONED
+_require_non_zoned_device "$SCRATCH_DEV"
 
 rm -f $seqres.full
 

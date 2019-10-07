@@ -51,6 +51,8 @@ _require_scratch_dev_pool 3
 _test_unmount
 _require_btrfs_forget_or_module_loadable
 _require_btrfs_fs_feature raid56
+# raid56 is not supported on HMZONED
+_require_non_zoned_device "${SCRATCH_DEV}"
 
 _scratch_dev_pool_get 3
 

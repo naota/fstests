@@ -1920,6 +1920,10 @@ _require_dm_target()
 	if [ $? -ne 0 ]; then
 		_notrun "This test requires dm $target support"
 	fi
+
+	if [ $target = thin-pool ]; then
+		_require_non_zoned_device ${SCRATCH_DEV}
+	fi
 }
 
 _zone_type()
@@ -1963,6 +1967,10 @@ _require_non_zoned_device()
 	local type=`_zone_type ${target}`
 	if [ "${type}" != "none" ]; then
 		_notrun "this test require non-zoned block device"
+	fi
+
+	if [ "$ZONED_EMULATION" = "true" ]; then
+		_notrun "this test require non-zoned block device (zoned emulation is enabled)"
 	fi
 }
 

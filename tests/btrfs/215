@@ -40,6 +40,7 @@ get_physical()
 
 # Modify as appropriate.
 _supported_fs btrfs
+_require_non_zoned_device $SCRATCH_DEV
 
 _scratch_mkfs > /dev/null
 # disable freespace inode to ensure file is the first thing in the data

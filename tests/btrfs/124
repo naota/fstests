@@ -57,6 +57,10 @@ _scratch_dev_pool_get 2
 dev1=`echo $SCRATCH_DEV_POOL | awk '{print $1}'`
 dev2=`echo $SCRATCH_DEV_POOL | awk '{print $2}'`
 
+# RAID1 is not supported on zoned btrfs
+_require_non_zoned_device "$dev1"
+_require_non_zoned_device "$dev2"
+
 dev1_sz=`blockdev --getsize64 $dev1`
 dev2_sz=`blockdev --getsize64 $dev2`
 # get min of both
@@ -113,6 +117,10 @@ _run_btrfs_util_prog device scan
 _scratch_mount >> $seqres.full 2>&1
 _run_btrfs_util_prog filesystem show
 echo >> $seqres.full
+if [ `_zone_type ${SCRATCH_DEV}` != "none" ]; then
+	# sleep some seconds to complete fixup
+	sleep 1
+fi
 _run_btrfs_balance_start ${SCRATCH_MNT} >>$seqres.full
 
 checkpoint2=`md5sum $SCRATCH_MNT/tf2`

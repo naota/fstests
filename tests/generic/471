@@ -43,6 +43,7 @@ mkdir $testdir
 # all filesystems, use a NOCOW file on btrfs.
 if [ $FSTYP == "btrfs" ]; then
 	_require_chattr C
+	_require_non_zoned_device $TEST_DEV
 	touch $testdir/f1
 	$CHATTR_PROG +C $testdir/f1
 fi

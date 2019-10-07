@@ -222,6 +222,14 @@ _btrfs_get_profile_configs()
 		else
 			local unsupported=()
 		fi
+
+		if [ `_zone_type $TEST_DEV` != "none" ]; then
+			unsupported+=(
+				"raid5"
+				"raid6"
+			)
+		fi
+
 		for unsupp in "${unsupported[@]}"; do
 			if [ "${profiles[0]}" == "$unsupp" -o "${profiles[1]}" == "$unsupp" ]; then
 			     if [ -z "$BTRFS_PROFILE_CONFIGS" ]; then
@@ -410,4 +418,11 @@ _btrfs_forget_or_module_reload()
 	_btrfs_supports_forget && return
 
 	_reload_fs_module "btrfs"
+}
+
+_scratch_btrfs_is_zoned()
+{
+	[ `_zone_type ${SCRATCH_DEV}` != "none" ] && return 0
+	[ "$ZONED_EMULATION" = true ] && return 0
+	return 1
 }

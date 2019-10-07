@@ -41,6 +41,8 @@ _supported_fs btrfs
 _require_scratch_dev_pool 4
 _require_btrfs_command inspect-internal dump-tree
 _require_btrfs_fs_feature raid56
+# raid56 is not supported on HMZONED
+_require_non_zoned_device "${SCRATCH_DEV}"
 
 get_physical()
 {

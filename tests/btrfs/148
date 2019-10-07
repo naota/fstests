@@ -30,6 +30,8 @@ _require_scratch
 _require_scratch_dev_pool 4
 _require_odirect
 _require_btrfs_fs_feature raid56
+# raid56 is not supported on HMZONED
+_require_non_zoned_device "${SCRATCH_DEV}"
 
 _scratch_dev_pool_get 4
 

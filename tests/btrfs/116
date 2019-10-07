@@ -29,6 +29,8 @@ _cleanup()
 # real QA test starts here
 _supported_fs btrfs
 _require_scratch
+# Writing non-contiguous data directly to the device
+_require_non_zoned_device $SCRATCH_DEV
 
 rm -f $seqres.full
 

@@ -30,6 +30,8 @@ _cleanup()
 # real QA test starts here
 _supported_fs btrfs
 _require_scratch_dev_pool 4
+# RAID profiles are not supported on zoned btrfs
+_require_non_zoned_device "${SCRATCH_DEV}"
 rm -f $seqres.full
 
 create_group_profile()
