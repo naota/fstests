@@ -56,7 +56,7 @@ rm -f $seqres.full
 # Test cases related to raid in btrfs
 _test_raid0()
 {
-	export MKFS_OPTIONS="-m raid0 -d raid0"
+	export MKFS_OPTIONS="${ORIG_MKFS_OPTIONS} -m raid0 -d raid0"
 	_scratch_pool_mkfs >> $seqres.full 2>&1 || _fail "mkfs failed"
 	_scratch_mount
 	dirp=`mktemp -duq $SCRATCH_MNT/dir.XXXXXX`
@@ -66,7 +66,7 @@ _test_raid0()
 
 _test_raid1()
 {
-	export MKFS_OPTIONS="-m raid1 -d raid1"
+	export MKFS_OPTIONS="${ORIG_MKFS_OPTIONS} -m raid1 -d raid1"
 	_scratch_pool_mkfs >> $seqres.full 2>&1 || _fail "mkfs failed"
 	_scratch_mount
 	dirp=`mktemp -duq $SCRATCH_MNT/dir.XXXXXX`
@@ -76,7 +76,7 @@ _test_raid1()
 
 _test_raid10()
 {
-	export MKFS_OPTIONS="-m raid10 -d raid10"
+	export MKFS_OPTIONS="${ORIG_MKFS_OPTIONS} -m raid10 -d raid10"
 	_scratch_pool_mkfs >> $seqres.full 2>&1 || _fail "mkfs failed"
 	_scratch_mount
 	dirp=`mktemp -duq $SCRATCH_MNT/dir.XXXXXX`
@@ -86,7 +86,7 @@ _test_raid10()
 
 _test_single()
 {
-	export MKFS_OPTIONS="-m single -d single"
+	export MKFS_OPTIONS="${ORIG_MKFS_OPTIONS} -m single -d single"
 	_scratch_pool_mkfs >> $seqres.full 2>&1 || _fail "mkfs failed"
 	_scratch_mount
 	dirp=`mktemp -duq $SCRATCH_MNT/dir.XXXXXX`
@@ -102,7 +102,7 @@ _test_add()
 
 	n=$(($n-1))
 
-	export MKFS_OPTIONS=""
+	export MKFS_OPTIONS="${ORIG_MKFS_OPTIONS}"
 	_scratch_mkfs >> $seqres.full 2>&1 || _fail "mkfs failed"
 	_scratch_mount
 	dirp=`mktemp -duq $SCRATCH_MNT/dir.XXXXXX`
@@ -131,7 +131,7 @@ _test_replace()
 	n=$(($n-1))
 	ds=${devs[@]:1:$(($n-1))}
 
-	export MKFS_OPTIONS="-m raid1 -d raid1"
+	export MKFS_OPTIONS="${ORIG_MKFS_OPTIONS} -m raid1 -d raid1"
 	_scratch_mkfs "$ds" >> $seqres.full 2>&1 || _fail "tr: mkfs failed"
 	_scratch_mount
 	dirp=`mktemp -duq $SCRATCH_MNT/dir.XXXXXX`
@@ -180,12 +180,13 @@ _test_remove()
 	_scratch_unmount
 }
 
+export ORIG_MKFS_OPTIONS=${MKFS_OPTIONS}
+
 if ! _scratch_btrfs_is_zoned; then
 	_test_raid0
 	_test_raid1
 	_test_raid10
 fi
-
 _test_single
 _test_add
 if ! _scratch_btrfs_is_zoned; then
