@@ -28,6 +28,7 @@ trap "_cleanup; exit \$status" 0 1 2 3 15
 # real QA test starts here
 _supported_fs btrfs
 _require_scratch
+_check_minimal_fs_size $((1024 * 1024 * 1024))
 
 rm -f $seqres.full
 
