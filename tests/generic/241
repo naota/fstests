@@ -21,6 +21,14 @@ _cleanup()
 {
     cd /
     rm -f $tmp.*
+    if [[ "$FSTYP" == btrfs ]] && ((status)); then
+	    {
+		    echo "Reformat TEST_DEV not to affect following test cases."
+		    umount $TEST_DEV
+		    _mkfs_dev -f $TEST_DEV
+		    _test_mount
+	    } >> $seqres.full 2>&1
+    fi
 }
 
 # get standard environment, filters and checks

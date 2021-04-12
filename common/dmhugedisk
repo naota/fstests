@@ -16,6 +16,8 @@ _dmhugedisk_init()
 	local dm_backing_dev=$SCRATCH_DEV
 	local chunk_size="$2"
 
+	_require_non_zoned_device $dm_backing_dev
+
 	if [ -z "$chunk_size" ]; then
 		chunk_size=512
 	fi
